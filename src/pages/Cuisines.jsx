@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { motion } from 'framer-motion'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
-import { FaPizzaSlice, FaHamburger } from 'react-icons/fa'
+import { FaPizzaSlice, FaHamburger, FaSpinner } from 'react-icons/fa'
 import { GiNoodles, GiChopsticks, GiTacos, GiIndianPalace, GiFrenchFries } from 'react-icons/gi'
 
 const cuisineList = [
@@ -56,7 +56,7 @@ function Cuisines() {
         }
     }
 
-    if (isLoading) return <LoadingMessage>Loading...</LoadingMessage>
+    if (isLoading) return <LoadingMessage><FaSpinner className="spinner" />Loading...</LoadingMessage>
     if (error) return <ErrorMessage>Error: {error}</ErrorMessage>
     if (cuisine.length === 0) return <NoResultsMessage>No recipes found for "{params.type}" cuisine. Try a different cuisine.</NoResultsMessage>
 
@@ -118,6 +118,12 @@ const Grid = styled(motion.div)`
 `
 
 const Card = styled.div`
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 2rem;
+    }
     a {
         text-decoration: none;
     }
@@ -126,14 +132,19 @@ const Card = styled.div`
         padding: 1rem;
         color: #333;
     }
+    &:hover {
+        transform: scale(1.02);
+        transition: transform 0.3s ease-in-out;
+    }
 `
 
 const ImageContainer = styled.div`
     width: 100%;
-    height: 200px;
+    height: 250px;
     border-radius: 2rem;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `
 
 const ImagePlaceholder = styled.div`
@@ -157,6 +168,23 @@ const LoadingMessage = styled.div`
     font-size: 1.5rem;
     margin-top: 2rem;
     color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    .spinner {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
 `
 
 const ErrorMessage = styled.div`

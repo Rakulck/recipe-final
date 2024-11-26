@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BackButton from "../components/BackButton";
 import { Grid, Card, StyledLink } from "../components/styled/RecipeCard";
+import { Spinner } from "../components/styled/Spinner";
 
 function Veggie() {
   const [veggie, setVeggie] = useState([]);
@@ -31,7 +32,7 @@ function Veggie() {
     }
   };
 
-  if (isLoading) return <div>Loading vegetarian recipes...</div>;
+  if (isLoading) return <Spinner />;
   if (error) return <div>Error: {error}</div>;
   if (!veggie || veggie.length === 0) return <div>No recipes found</div>;
 

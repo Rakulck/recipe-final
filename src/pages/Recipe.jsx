@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import styled from "styled-components"
 import { useParams } from 'react-router-dom'
 import BackButton from '../components/BackButton';
+import { BiTime } from 'react-icons/bi'
+import { GiKnifeFork } from 'react-icons/gi'
+import { FaFireAlt } from 'react-icons/fa'
 
 function Recipe() {
     const [details, setDetails] = useState({})
@@ -53,7 +56,7 @@ function Recipe() {
         return Math.round((200 + Math.random() * 600) / 5) * 5;
     }
 
-    if (isLoading) return <LoadingMessage>Loading...</LoadingMessage>;
+    if (isLoading) return <Spinner />;
     if (error) return <ErrorMessage>Error: {error}</ErrorMessage>;
 
     return (
@@ -94,13 +97,13 @@ function Recipe() {
                         <div>
                             <RecipeMetadata>
                                 <MetadataItem>
-                                    <span>Servings:</span> {details.servings || 'N/A'}
+                                    <GiKnifeFork size={24} /> <span>Servings:</span> {details.servings || 'N/A'}
                                 </MetadataItem>
                                 <MetadataItem>
-                                    <span>Calories:</span> {details.calories || getRandomCalories()} per serving
+                                    <FaFireAlt size={24} /> <span>Calories:</span> {details.calories || getRandomCalories()} per serving
                                 </MetadataItem>
                                 <MetadataItem>
-                                    <span>Ready in:</span> {details.readyInMinutes || 'N/A'} minutes
+                                    <BiTime size={24} /> <span>Ready in:</span> {details.readyInMinutes || 'N/A'} minutes
                                 </MetadataItem>
                             </RecipeMetadata>
                             <Instructions>
@@ -281,12 +284,20 @@ const ImagePlaceholder = styled.div`
     }
 `
 
-const LoadingMessage = styled.div`
-    text-align: center;
-    font-size: 1.5rem;
-    margin-top: 4rem;
-    color: #333;
-`
+const Spinner = styled.div`
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid black;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
 
 const ErrorMessage = styled.div`
     text-align: center;

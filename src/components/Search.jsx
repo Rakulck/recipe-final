@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { FaSearch, FaHistory } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
+import { BiSortDown, BiSortUp } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import searchSuggestions from './SearchSuggestions';
 
@@ -62,14 +63,24 @@ const SuggestionList = styled.ul`
     top: 100%;
     left: 0;
     right: 0;
-    background-color: white;
-    border: 1px solid #ddd;
+    background: linear-gradient(35deg, #494949, #313131);
+    border: 1px solid #666;
     border-radius: 0 0 1rem 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     max-height: 200px;
     overflow-y: auto;
     z-index: 1;
     margin-top: 0.5rem;
+    color: white;
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 `;
 
 const SuggestionItem = styled.li`
@@ -85,21 +96,26 @@ const SuggestionItem = styled.li`
     }
 
     &:hover, &.selected {
-        background-color: #f0f0f0;
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     .suggestion-text {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.8rem;
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .remove-button {
-        color: #999;
-        font-size: 0.8rem;
-        padding: 0.2rem 0.5rem;
+        color: #ccc;
+        background: transparent;
+        border: none;
         &:hover {
-            color: #666;
+            color: #fff;
         }
     }
 `;
@@ -107,9 +123,9 @@ const SuggestionItem = styled.li`
 const SectionTitle = styled.div`
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
-    color: #666;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #ddd;
+    color: #a9a9a9;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid #666;
 `;
 
 function Search() {
@@ -246,7 +262,7 @@ function Search() {
                 <SuggestionList>
                     {showRecent && (
                         <>
-                            <SectionTitle>Recent Searches</SectionTitle>
+                           
                             {recentSearches.map((term, index) => (
                                 <SuggestionItem
                                     key={`recent-${index}`}
@@ -254,7 +270,6 @@ function Search() {
                                     className={index === selectedSuggestionIndex ? 'selected' : ''}
                                 >
                                     <div className="suggestion-text">
-                                        <FaHistory size={12} />
                                         {term}
                                     </div>
                                     <button 

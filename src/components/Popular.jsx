@@ -3,6 +3,53 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css';
 import { safeLocalStorage, LoadingMessage, ErrorMessage, Wrapper } from './sharedUtils';
 import { Card, StyledLink } from './styled/RecipeCard';
+import styled from 'styled-components';
+
+// Add new styled components for arrows
+const Arrow = styled.div`
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  z-index: 2;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+  }
+
+  &.prev {
+    left: 10px;
+  }
+
+  &.next {
+    right: 10px;
+  }
+`;
+
+// Add spinner styled component (add this near other styled components)
+const Spinner = styled.div`
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
 
 function Popular() {
     const [recipes, setRecipes] = useState([]);
@@ -17,11 +64,11 @@ function Popular() {
         setIsLoading(true);
         setError(null);
         try {
-            const check = safeLocalStorage.getItem('popular');
+                const check = safeLocalStorage.getItem('popular');
             if (check) {
                 setRecipes(check);
             } else {
-                const api = await fetch(`https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_APIKEY}&number=12`);
+                const api = await fetch(`https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_APIKEY}&number=10`);
                 if (!api.ok) {
                     throw new Error(`HTTP error! status: ${api.status}`);
                 }
@@ -45,7 +92,7 @@ function Popular() {
         </Card>
     );
 
-    if (isLoading) return <LoadingMessage>Loading popular picks...</LoadingMessage>;
+    if (isLoading) return <Spinner />;
     if (error) return <ErrorMessage>{error}</ErrorMessage>;
     if (!recipes || recipes.length === 0) return <ErrorMessage>No recipes found.</ErrorMessage>;
 
@@ -53,17 +100,22 @@ function Popular() {
         <Wrapper>
             <h3>Popular Picks!</h3>
             <Splide options={{
-                perPage: 4,
-                arrows: false,
+                perPage: 3,
+                arrows: true,
                 pagination: false,
                 drag: "free",
                 gap: "1rem",
                 breakpoints: {
-                    1024: { perPage: 3 },
-                    768: { perPage: 2 },
-                    480: { perPage: 1 }
+                    1024: { perPage: 2 },
+                    768: { perPage: 1 }
                 }
-            }}>
+            }}
+            renderControls={() => (
+                <>
+                    <Arrow className="prev splide__arrow--prev">←</Arrow>
+                    <Arrow className="next splide__arrow--next">→</Arrow>
+                </>
+            )}>
                 {recipes.map((recipe) => (
                     <SplideSlide key={recipe.id}>
                         <RecipeCard recipe={recipe} />

@@ -1,5 +1,3 @@
-import { FaPizzaSlice, FaHamburger } from 'react-icons/fa';
-import { GiNoodles, GiButterToast, GiChopsticks, GiRiceCooker, GiBowlOfRice, GiTeapot, GiNoodles as GiVietNoodles } from 'react-icons/gi';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
@@ -8,40 +6,76 @@ function All_Cuisines() {
     <List>
       <Grid>
         <SLink to={'/cuisine/Italian'}>
-          <FaPizzaSlice/>
-          <h4>Italian</h4>
+          <Card>
+         
+            <ImageWrapper>
+              <img src="/italian.jpg" alt="Italian cuisine" />
+            </ImageWrapper>
+            <h4>Italian</h4>
+          </Card>
         </SLink>
         <SLink to={'/cuisine/American'}>
-          <FaHamburger/>
-          <h4>American</h4>
+          <Card>
+  
+            <ImageWrapper>
+              <img src="/american.jpg" alt="American cuisine" />
+            </ImageWrapper>
+            <h4>American</h4>
+          </Card>
         </SLink>
         <SLink to={'/cuisine/Thai'}>
-          <GiNoodles/>
-          <h4>Thai</h4>
+          <Card>
+        
+            <ImageWrapper>
+              <img src="/thai.jpg" alt="Thai cuisine" />
+            </ImageWrapper>
+            <h4>Thai</h4>
+          </Card>
         </SLink>
         <SLink to={'/cuisine/French'}>
-          <GiButterToast/>
-          <h4>French</h4>
+          <Card>
+ 
+            <ImageWrapper>
+              <img src="/french.jpg" alt="French cuisine" />
+            </ImageWrapper>
+            <h4>French</h4>
+          </Card>
         </SLink>
         <SLink to={'/cuisine/Japanese'}>
-          <GiChopsticks/>
-          <h4>Japanese</h4>
+          <Card>
+
+            <ImageWrapper>
+              <img src="/japan.jpg" alt="Japanese cuisine" />
+            </ImageWrapper>
+            <h4>Japanese</h4>
+          </Card>
         </SLink>
         <SLink to={'/cuisine/Indian'}>
-          <GiRiceCooker/>
-          <h4>Indian</h4>
+          <Card>
+         
+            <ImageWrapper>
+              <img src="/indian.jpg" alt="Indian cuisine" />
+            </ImageWrapper>
+            <h4>Indian</h4>
+          </Card>
         </SLink>
         <SLink to={'/cuisine/Korean'}>
-          <GiBowlOfRice/>
-          <h4>Korean</h4>
+          <Card>
+          
+            <ImageWrapper>
+              <img src="/korean.jpg" alt="Korean cuisine" />
+            </ImageWrapper>
+            <h4>Korean</h4>
+          </Card>
         </SLink>
         <SLink to={'/cuisine/British'}>
-          <GiTeapot/>
-          <h4>British</h4>
-        </SLink>
-        <SLink to={'/cuisine/Vietnamese'}>
-          <GiVietNoodles/>
-          <h4>Vietnamese</h4>
+          <Card>
+    
+            <ImageWrapper>
+              <img src="/british.jpg" alt="British cuisine" />
+            </ImageWrapper>
+            <h4>British</h4>
+          </Card>
         </SLink>
       </Grid>
     </List>
@@ -58,8 +92,8 @@ const List = styled.div`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  max-width: 1200px;
+  gap: 3rem;
+  max-width: 1400px;
   width: 100%;
   
   @media (max-width: 1024px) {
@@ -68,53 +102,64 @@ const Grid = styled.div`
   
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
   
   @media (max-width: 480px) {
     grid-template-columns: repeat(1, 1fr);
-    gap: 1rem;
+    gap: 1.5rem;
   }
 `;
 
 const SLink = styled(NavLink)`
+  text-decoration: none;
+  cursor: pointer;
+`;
+
+const Card = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  text-decoration: none;
-  background: linear-gradient(35deg, #494949, #313131);
-  width: 6rem;
-  height: 6rem;
-  cursor: pointer;
-  transform: scale(0.8);
-  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease-in-out;
+  background: white;
   
-  h4 {
-    color: white;
-    font-size: 0.8rem;
-  }
-  
-  svg {
-    color: white;
-    font-size: 2.5rem;
-  }
-  
-  &.active {
-    background: linear-gradient(to right, #f27121, #e94057);
-    
-    svg {
-      color: white;
-    }
-    
-    h4 {
-      color: white;
-    }
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
   }
 
-  &:hover {
-    transform: scale(0.9);
-    transition: transform 0.3s ease-in-out;
+  h4 {
+    margin: 0;
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+  }
+`;
+
+const Flag = styled.span`
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+`;
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover img {
+    transform: scale(1.1);
   }
 `;
 
