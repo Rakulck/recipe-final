@@ -114,6 +114,10 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    document.title = "Delicious - Recipe Finder";
+  }, []);
+
   if (!isOnline) {
     return (
       <BrowserRouter>
