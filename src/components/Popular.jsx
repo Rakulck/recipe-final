@@ -107,7 +107,7 @@ function Popular() {
 
     return (
         <Wrapper>
-            <h3>Popular Picks!</h3>
+            <h3>Popular Picks</h3>
             <StyledSplide  // Replace Splide with StyledSplide
                 options={{
                     perPage: 3,

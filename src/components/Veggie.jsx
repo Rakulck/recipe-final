@@ -92,7 +92,7 @@ function Veggie() {
 
     return (
         <Wrapper>
-            <h3>Veggie Picks!</h3>
+            <h3>Veggie Picks</h3>
             <StyledSplide  // Replace Splide with StyledSplide
                 options={{
                     perPage: 3,
