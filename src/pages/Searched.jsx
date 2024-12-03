@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'
+
 import BackButton from '../components/BackButton';
 import { Grid, Card, StyledLink } from '../components/styled/RecipeCard';
 import { Spinner } from '../components/styled/Spinner';
@@ -13,7 +13,6 @@ function Searched() {
     const [error, setError] = useState(null);
     const [sortType, setSortType] = useState('default');
     const params = useParams();
-    const location = useLocation();
 
     const sortRecipes = (recipes, sortType) => {
         const sortedRecipes = [...recipes];

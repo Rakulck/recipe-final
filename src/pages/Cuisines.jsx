@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from "styled-components"
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import { FaPizzaSlice, FaHamburger, FaSpinner } from 'react-icons/fa'
@@ -18,25 +18,32 @@ const cuisineList = [
 
 function Cuisines() {
     const [cuisine, setCuisine] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [cuisineCache, setCuisineCache] = useState({})
     const [error, setError] = useState(null)
     let params = useParams()
     const navigate = useNavigate()
 
     const getCuisine = async (name) => {
-        setIsLoading(true)
-        setError(null)
         try {
+            if (cuisineCache[name]) {
+                setCuisine(cuisineCache[name])
+                return
+            }
+
             const data = await fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_APIKEY}&cuisine=${name}`)
             if (!data.ok) {
                 throw new Error('Failed to fetch recipes')
             }
             const recipes = await data.json()
+            
+            setCuisineCache(prev => ({
+                ...prev,
+                [name]: recipes.results
+            }))
             setCuisine(recipes.results)
+            setError(null)
         } catch (err) {
             setError(err.message)
-        } finally {
-            setIsLoading(false)
         }
     }
 
@@ -56,9 +63,8 @@ function Cuisines() {
         }
     }
 
-    if (isLoading) return <LoadingMessage><FaSpinner className="spinner" />Loading...</LoadingMessage>
     if (error) return <ErrorMessage>Error: {error}</ErrorMessage>
-    if (cuisine.length === 0) return <NoResultsMessage>No recipes found for "{params.type}" cuisine. Try a different cuisine.</NoResultsMessage>
+    // if (cuisine.length === 0) return <NoResultsMessage>No recipes found for "{params.type}" cuisine. Try a different cuisine.</NoResultsMessage>
 
     return (
         <Container>
@@ -75,32 +81,35 @@ function Cuisines() {
                     </SLink>
                 ))}
             </CuisineList>
-            <Grid
-                animate={{ opacity: 1 }}
-                initial={{ opacity: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-            >   
-                {cuisine.map((item) => {
-                    return (
-                        <Card key={item.id}>
-                            <Link to={'/recipe/' + item.id}>
-                                <ImageContainer>
-                                    <img 
-                                        src={item.image} 
-                                        alt={item.title}
-                                        onError={handleImageError}
-                                    />
-                                    <ImagePlaceholder style={{display: 'none'}}>
-                                        <p>Image not available</p>
-                                    </ImagePlaceholder>
-                                </ImageContainer>
-                                <h4>{item.title}</h4>     
-                            </Link>           
-                        </Card>
-                    )
-                })}
-            </Grid>
+            <AnimatePresence mode="wait">
+                <Grid
+                    key={params.type}
+                    initial={{ x: '100%' }}
+                    animate={{ x: 0 }}
+                    exit={{ x: '-100%' }}
+                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                >   
+                    {cuisine.map((item) => {
+                        return (
+                            <Card key={item.id}>
+                                <Link to={'/recipe/' + item.id}>
+                                    <ImageContainer>
+                                        <img 
+                                            src={item.image} 
+                                            alt={item.title}
+                                            onError={handleImageError}
+                                        />
+                                        <ImagePlaceholder style={{display: 'none'}}>
+                                            <p>Image not available</p>
+                                        </ImagePlaceholder>
+                                    </ImageContainer>
+                                    <h4>{item.title}</h4>     
+                                </Link>           
+                            </Card>
+                        )
+                    })}
+                </Grid>
+            </AnimatePresence>
         </Container>
     )
 }
@@ -115,6 +124,7 @@ const Grid = styled(motion.div)`
     grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
     grid-gap: 2rem;
     margin-top: 2rem;
+    overflow: hidden;
 `
 
 const Card = styled.div`
@@ -160,30 +170,6 @@ const ImagePlaceholder = styled.div`
     p {
         color: #666;
         font-style: italic;
-    }
-`
-
-const LoadingMessage = styled.div`
-    text-align: center;
-    font-size: 1.5rem;
-    margin-top: 2rem;
-    color: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-
-    .spinner {
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
     }
 `
 

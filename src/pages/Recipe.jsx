@@ -6,6 +6,7 @@ import { BiTime } from 'react-icons/bi'
 import { GiKnifeFork } from 'react-icons/gi'
 import { FaFireAlt } from 'react-icons/fa'
 import { IoShareSocialOutline } from 'react-icons/io5';
+import { motion, AnimatePresence } from 'framer-motion'
 
 function Recipe() {
     const [details, setDetails] = useState({})
@@ -114,33 +115,49 @@ function Recipe() {
                             <IoShareSocialOutline size={24} />
                         </ShareButton>
                     </ButtonWrapper>
-                    {activeTab === 'instructions' && (
-                        <div>
-                            <RecipeMetadata>
-                                <MetadataItem>
-                                    <GiKnifeFork size={24} /> <span>Servings:</span> {details.servings || 'N/A'}
-                                </MetadataItem>
-                                <MetadataItem>
-                                    <FaFireAlt size={24} /> <span>Calories:</span> {details.calories || getRandomCalories()} per serving
-                                </MetadataItem>
-                                <MetadataItem>
-                                    <BiTime size={24} /> <span>Ready in:</span> {details.readyInMinutes || 'N/A'} minutes
-                                </MetadataItem>
-                            </RecipeMetadata>
-                            <Instructions>
-                                {cleanInstructions(details.instructions).map((step, index) => (
-                                    <li key={index}>{step}.</li>
-                                ))}
-                            </Instructions>
-                        </div>
-                    )}
-                    {activeTab === 'ingredients' && (
-                        <IngredientList>
-                            {details.extendedIngredients && details.extendedIngredients.map((ingredient) => (
-                                <li key={ingredient.id}>{ingredient.original}</li>
-                            ))}
-                        </IngredientList> 
-                    )}
+                    <AnimatePresence mode="wait">
+                        {activeTab === 'instructions' && (
+                            <motion.div
+                                key="instructions"
+                                initial={{ x: 20, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: -20, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <RecipeMetadata>
+                                    <MetadataItem>
+                                        <GiKnifeFork size={24} color="#FF9800" /> <span>Servings:</span> {details.servings || 'N/A'}
+                                    </MetadataItem>
+                                    <MetadataItem>
+                                        <FaFireAlt size={24} color="#FF9800" /> <span>Calories:</span> {details.calories || getRandomCalories()} per serving
+                                    </MetadataItem>
+                                    <MetadataItem>
+                                        <BiTime size={24} color="#FF9800" /> <span>Ready in:</span> {details.readyInMinutes || 'N/A'} minutes
+                                    </MetadataItem>
+                                </RecipeMetadata>
+                                <Instructions>
+                                    {cleanInstructions(details.instructions).map((step, index) => (
+                                        <li key={index}>{step}.</li>
+                                    ))}
+                                </Instructions>
+                            </motion.div>
+                        )}
+                        {activeTab === 'ingredients' && (
+                            <motion.div
+                                key="ingredients"
+                                initial={{ x: 20, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: -20, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <IngredientList>
+                                    {details.extendedIngredients && details.extendedIngredients.map((ingredient) => (
+                                        <li key={ingredient.id}>{ingredient.original}</li>
+                                    ))}
+                                </IngredientList>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </Info>
             </DetailWrapper>
         </div>

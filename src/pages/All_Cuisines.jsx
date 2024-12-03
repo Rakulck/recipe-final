@@ -124,10 +124,13 @@ const Card = styled.div`
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   transition: all 0.3s ease-in-out;
   background: white;
-  
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    
+    h4 {
+      color: #ff6b00;
+    }
   }
 
   h4 {
@@ -137,6 +140,7 @@ const Card = styled.div`
     font-weight: 600;
     color: #333;
     text-align: center;
+    transition: color 0.3s ease;
   }
 `;
 

@@ -98,6 +98,11 @@ const ErrorFallback = ({ error }) => (
   </div>
 );
 
+const Logo = styled(GiKnifeFork)`
+  font-size: 24px;
+  color: #3498db;
+`;
+
 function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
