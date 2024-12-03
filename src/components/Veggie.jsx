@@ -37,6 +37,14 @@ const Arrow = styled.div`
   }
 `;
 
+// Add this styled component after other styled components
+const StyledSplide = styled(Splide)`
+  .splide__track {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+`;
+
 function Veggie() {
     const [recipes, setRecipes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -85,7 +93,7 @@ function Veggie() {
     return (
         <Wrapper>
             <h3>Veggie Picks!</h3>
-            <Splide 
+            <StyledSplide  // Replace Splide with StyledSplide
                 options={{
                     perPage: 3,
                     arrows: true,
@@ -117,7 +125,7 @@ function Veggie() {
                         <RecipeCard recipe={recipe} />
                     </SplideSlide>
                 ))}
-            </Splide>
+            </StyledSplide>
         </Wrapper>
     )
 }

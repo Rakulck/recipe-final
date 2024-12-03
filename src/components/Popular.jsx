@@ -35,6 +35,12 @@ const Arrow = styled.div`
     right: 10px;
   }
 `;
+const StyledSplide = styled(Splide)`
+  .splide__track {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+`;
 
 // Add spinner styled component (add this near other styled components)
 const Spinner = styled.div`
@@ -102,7 +108,7 @@ function Popular() {
     return (
         <Wrapper>
             <h3>Popular Picks!</h3>
-            <Splide 
+            <StyledSplide  // Replace Splide with StyledSplide
                 options={{
                     perPage: 3,
                     arrows: true,
@@ -134,7 +140,7 @@ function Popular() {
                         <RecipeCard recipe={recipe} />
                     </SplideSlide>
                 ))}
-            </Splide>
+            </StyledSplide>
         </Wrapper>
     )
 }
