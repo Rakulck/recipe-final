@@ -5,6 +5,7 @@ import { safeLocalStorage, LoadingMessage, ErrorMessage, Wrapper } from './share
 import { Card, StyledLink } from './styled/RecipeCard';
 import styled from 'styled-components';
 import { Spinner } from './styled/Spinner';
+import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 
 // Add new styled components for arrows
 const Arrow = styled.div`
@@ -53,7 +54,7 @@ function Veggie() {
             if (check) {
                 setRecipes(check);
             } else {
-                const api = await fetch(`https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_APIKEY}&number=10&tags=vegetarian`);
+                const api = await fetch(`https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_APIKEY}&number=50&tags=vegetarian`);
                 if (!api.ok) {
                     throw new Error(`HTTP error! status: ${api.status}`);
                 }
@@ -84,23 +85,33 @@ function Veggie() {
     return (
         <Wrapper>
             <h3>Veggie Picks!</h3>
-            <Splide options={{
-                perPage: 3,
-                arrows: true,
-                pagination: false,
-                drag: "free",
-                gap: "1rem",
-                breakpoints: {
-                    1024: { perPage: 2 },
-                    768: { perPage: 1 }
-                }
-            }}
-            renderControls={() => (
-                <>
-                    <Arrow className="prev splide__arrow--prev">←</Arrow>
-                    <Arrow className="next splide__arrow--next">→</Arrow>
-                </>
-            )}>
+            <Splide 
+                options={{
+                    perPage: 3,
+                    arrows: true,
+                    pagination: false,
+                    drag: "free",
+                    gap: "1rem",
+                    type: 'loop',
+                    autoScroll: {
+                        speed: 1,
+                        pauseOnHover: true,
+                        rewind: false,    // Prevent rewind animation
+                        gap: 0,           // Remove gap during transition
+                    },
+                    focus: 'center',      // Helps with smoother looping
+                    breakpoints: {
+                        1024: { perPage: 2 },
+                        768: { perPage: 1 }
+                    }
+                }}
+                extensions={{ AutoScroll }}
+                renderControls={() => (
+                    <>
+                        <Arrow className="prev splide__arrow--prev">←</Arrow>
+                        <Arrow className="next splide__arrow--next">→</Arrow>
+                    </>
+                )}>
                 {recipes.map((recipe) => (
                     <SplideSlide key={recipe.id}>
                         <RecipeCard recipe={recipe} />

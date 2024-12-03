@@ -5,6 +5,7 @@ import BackButton from '../components/BackButton';
 import { BiTime } from 'react-icons/bi'
 import { GiKnifeFork } from 'react-icons/gi'
 import { FaFireAlt } from 'react-icons/fa'
+import { IoShareSocialOutline } from 'react-icons/io5';
 
 function Recipe() {
     const [details, setDetails] = useState({})
@@ -56,6 +57,23 @@ function Recipe() {
         return Math.round((200 + Math.random() * 600) / 5) * 5;
     }
 
+    const handleShare = async () => {
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: details.title,
+                    text: `Check out this recipe for ${details.title}!`,
+                    url: window.location.href
+                });
+            } else {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+            }
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
+
     if (isLoading) return <Spinner />;
     if (error) return <ErrorMessage>Error: {error}</ErrorMessage>;
 
@@ -92,6 +110,9 @@ function Recipe() {
                         >
                             Ingredients
                         </Button>
+                        <ShareButton onClick={handleShare}>
+                            <IoShareSocialOutline size={24} />
+                        </ShareButton>
                     </ButtonWrapper>
                     {activeTab === 'instructions' && (
                         <div>
@@ -332,5 +353,22 @@ const MetadataItem = styled.div`
         font-size: 1.1rem;
     }
 `
+
+const ShareButton = styled.button`
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.75rem;
+    margin-left: auto;
+    color: #313131;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: #666;
+    }
+`;
 
 export default Recipe
